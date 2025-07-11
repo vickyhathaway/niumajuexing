@@ -426,29 +426,34 @@ function updateWorkTime() {
 // 更新显示
 function updateDisplay() {
     const { hourlyRate, minuteRate, secondRate } = calculateRates();
-    
     // 计算今日收益
     const dailyEarnings = (totalWorkTime * secondRate).toFixed(2);
-    
+    // 计算本年累计收益
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const history = JSON.parse(localStorage.getItem('earningsHistory') || '[]');
+    let yearlyEarnings = history
+        .filter(record => {
+            const recordDate = new Date(record.date);
+            return recordDate.getFullYear() === currentYear;
+        })
+        .reduce((sum, record) => sum + record.earnings, 0);
+    yearlyEarnings += parseFloat(dailyEarnings); // 加上今日收益
+
     // 更新显示
     animateNumber(elements.dailyEarnings, parseFloat(dailyEarnings), '¥');
     elements.hourlyRate.textContent = `¥${hourlyRate.toFixed(2)}/小时`;
-    
     // 更新虚拟消费
     updateAffordableItems(parseFloat(dailyEarnings));
-    
-    // 更新梦想基金
-    updateDreamFund(parseFloat(dailyEarnings));
-    
+    // 更新梦想基金（用本年累计金额）
+    updateDreamFund(yearlyEarnings);
     // 检查成就
     checkAchievement('coffee', parseFloat(dailyEarnings));
     checkAchievement('hundred', parseFloat(dailyEarnings));
-    
     // 创建收益粒子效果
     if (isWorking && !isPaused && settings.enableEffects && Math.random() < 0.3) {
         createEarningsParticle();
     }
-    
     // 检查百元彩带
     checkConfetti(parseFloat(dailyEarnings));
 }

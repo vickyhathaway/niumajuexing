@@ -178,10 +178,10 @@ function setupEventListeners() {
     
     // 设置按钮
     if (elements.settingsBtn) elements.settingsBtn.addEventListener('click', openSettings);
-    const closeSettings = document.getElementById('close-settings');
-    if (closeSettings) closeSettings.addEventListener('click', closeSettings);
-    const saveSettings = document.getElementById('save-settings');
-    if (saveSettings) saveSettings.addEventListener('click', saveSettings);
+    const closeSettingsBtn = document.getElementById('close-settings');
+    if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
+    const saveSettingsBtn = document.getElementById('save-settings');
+    if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
     
     // 日历按钮
     const calendarBtn = document.getElementById('calendar-btn');

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>按钮测试</title>
+</head>
+<body>
+    <button id="test-btn" onclick="alert('按钮工作正常!')">测试按钮</button>
+    <button id="calendar-test" onclick="testCalendar()">日历测试</button>
+    
+    <script>
+        function testCalendar() {
+            alert('日历按钮工作!');
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('测试页面加载完成');
+            const btn = document.getElementById('calendar-test');
+            console.log('找到按钮:', btn);
+        });
+    </script>
+</body>
+</html>

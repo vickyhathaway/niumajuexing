@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日历按钮测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-calendar {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-test {
+            background: #2196F3;
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 400px;
+        }
+        .btn-close {
+            float: right;
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .log {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 日历按钮测试页面</h1>
+        
+        <div>
+            <button id="test-btn" class="btn btn-test" onclick="testBasicFunction()">🔵 基础测试按钮</button>
+            <button id="calendar-btn" class="btn btn-calendar">📅 收益日历</button>
+        </div>
+        
+        <div class="log" id="log">
+            <div>📝 测试日志:</div>
+        </div>
+        
+        <div>
+            <button onclick="clearLog()" class="btn">清空日志</button>
+            <button onclick="testCalendarDirectly()" class="btn">直接测试日历</button>
+        </div>
+    </div>
+    
+    <!-- 日历模态框 -->
+    <div id="calendar-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-calendar" class="btn-close">×</button>
+            <h2>📅 收益日历</h2>
+            <p>日历功能正常工作！</p>
+            <div id="calendar-content">
+                <p>这里是日历内容区域</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 日志函数
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${time}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '<div>📝 测试日志:</div>';
+        }
+        
+        // 基础测试函数
+        function testBasicFunction() {
+            log('✅ 基础按钮点击成功!');
+            alert('基础功能正常!');
+        }
+        
+        // 日历相关函数
+        function openCalendar() {
+            log('🔄 开始打开日历...');
+            const modal = document.getElementById('calendar-modal');
+            if (modal) {
+                modal.style.display = 'block';
+                log('✅ 日历模态框已显示');
+            } else {
+                log('❌ 找不到日历模态框!');
+            }
+        }
+        
+        function closeCalendar() {
+            log('🔄 关闭日历...');
+            const modal = document.getElementById('calendar-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                log('✅ 日历模态框已关闭');
+            }
+        }
+        
+        function testCalendarDirectly() {
+            log('🧪 直接测试日历功能...');
+            openCalendar();
+        }
+        
+        // 页面加载完成后设置事件监听器
+        document.addEventListener('DOMContentLoaded', function() {
+            log('📄 页面加载完成');
+            
+            // 设置日历按钮事件
+            const calendarBtn = document.getElementById('calendar-btn');
+            log('🔍 查找日历按钮: ' + (calendarBtn ? '找到' : '未找到'));
+            
+            if (calendarBtn) {
+                log('🔗 绑定日历按钮点击事件...');
+                
+                calendarBtn.addEventListener('click', function(event) {
+                    log('🖱️ 日历按钮被点击!');
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    try {
+                        openCalendar();
+                    } catch (error) {
+                        log('❌ 打开日历出错: ' + error.message);
+                    }
+                });
+                
+                log('✅ 日历按钮事件绑定完成');
+            } else {
+                log('❌ 未找到日历按钮，无法绑定事件');
+            }
+            
+            // 设置关闭按钮事件
+            const closeBtn = document.getElementById('close-calendar');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeCalendar);
+                log('✅ 关闭按钮事件绑定完成');
+            }
+            
+            log('🎉 所有初始化完成!');
+        });
+    </script>
+</body>
+</html>

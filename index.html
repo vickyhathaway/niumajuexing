@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产力提升工具 - Productivity Booster</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 法律声明弹窗 -->
+    <div id="disclaimer-modal" class="modal disclaimer-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📚 使用声明</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>本工具仅用于时间管理教育，倡导高效工作</strong></p>
+                <ul>
+                    <li>✅ 提升对自我价值的认知</li>
+                    <li>✅ 激励高效完成工作获取自由时间</li>
+                    <li>❌ 不鼓励消极怠工行为</li>
+                </ul>
+                <p>所有数据仅存储在本地浏览器中，不会上传到任何服务器。</p>
+            </div>
+            <div class="modal-footer">
+                <button id="accept-disclaimer" class="btn-primary">我已了解并同意</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐私保护模式 - 伪装界面 -->
+    <div id="disguise-mode" class="disguise-container" style="display: none;">
+        <!-- 隐藏的返回按钮 -->
+        <button id="disguise-return-btn" class="disguise-return-btn" title="返回主界面 (Ctrl+H)">🔓</button>
+        
+        <div class="disguise-header">
+            <div class="disguise-logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzAwN0FGRiIvPgo8cGF0aCBkPSJNOCAxMkgxNlYyMEg4VjEyWiIgZmlsbD0id2hpdGUiLz4KPHA+dGggZD0iTTIwIDhIMjRWMjRIMjBWOFoiIGZpbGw9IndoaXRlIi8+CjwvcGc+Cjwvc3ZnPgo=" alt="笔记">
+                <h1>有道云笔记</h1>
+            </div>
+            <div class="disguise-nav">
+                <span class="nav-item active">笔记</span>
+                <span class="nav-item">收藏</span>
+                <span class="nav-item">回收站</span>
+                <span class="nav-item">设置</span>
+            </div>
+        </div>
+        <div class="disguise-sidebar">
+            <div class="folder-item">📁 工作计划</div>
+            <div class="folder-item">📁 学习笔记</div>
+            <div class="folder-item">📁 会议记录</div>
+            <div class="folder-item">📁 项目文档</div>
+        </div>
+        <div class="disguise-content">
+            <div class="note-header">
+                <h2>📋 今日工作计划</h2>
+                <span class="note-date">2024年12月19日</span>
+            </div>
+            <div class="note-body">
+                <h3>重要任务</h3>
+                <ul>
+                    <li>✅ 完成项目需求分析文档</li>
+                    <li>🔄 准备下午的项目评审会议材料</li>
+                    <li>📝 整理客户反馈并制定优化方案</li>
+                    <li>📚 学习新的前端框架技术</li>
+                </ul>
+                
+                <h3>工作重点</h3>
+                <p>今日主要聚焦于提升工作效率，合理安排时间分配。通过科学的时间管理方法，确保各项任务按时完成。</p>
+                
+                <h3>学习目标</h3>
+                <p>深入研究React最新特性，掌握Hooks的高级用法，为即将到来的项目重构做好技术准备。</p>
+                
+                <h3>会议安排</h3>
+                <ul>
+                    <li>10:00 - 团队晨会</li>
+                    <li>14:00 - 项目评审会议</li>
+                    <li>16:30 - 技术分享会</li>
+                </ul>
+                
+                <!-- 隐藏提示 -->
+                <div class="hidden-tip">
+                    <small style="color: #ccc; font-size: 12px;">💡 提示：按 Ctrl+H 或点击右上角按钮返回</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主界面 -->
+    <div id="main-app" class="app-container">
+        <!-- 顶部工具栏 -->
+        <header class="header">
+            <div class="header-left">
+                <h1>💰 带薪摸鱼激励器</h1>
+                <span class="subtitle">时间就是金钱，摸鱼也有价值</span>
+            </div>
+            <div class="header-right">
+                <button id="privacy-btn" class="btn-icon" title="隐私模式 (Ctrl+H)">
+                    <span id="privacy-icon">👁️</span>
+                </button>
+                <button id="settings-btn" class="btn-icon" title="设置">
+                    ⚙️
+                </button>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 核心金额显示面板 -->
+            <section class="earnings-panel">
+                <div class="earnings-main">
+                    <div class="earnings-label">今日已赚</div>
+                    <div id="daily-earnings" class="earnings-amount" data-blur="false">¥0.00</div>
+                    <div class="earnings-particles" id="particles-container"></div>
+                </div>
+                
+                <div class="earnings-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">本月累计</span>
+                        <span id="monthly-earnings" class="stat-value" data-blur="false">¥0.00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">本年累计</span>
+                        <span id="yearly-earnings" class="stat-value" data-blur="false">¥0.00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">时薪换算</span>
+                        <span id="hourly-rate" class="stat-value">¥0.00/小时</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">工作状态</span>
+                        <span id="work-status" class="stat-value status-off">未开始</span>
+                    </div>
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="control-buttons">
+                    <button id="start-work" class="btn-primary">🚀 开始上班</button>
+                    <button id="pause-work" class="btn-secondary" disabled>⏸️ 暂停</button>
+                    <button id="end-work" class="btn-danger" disabled>🏁 下班</button>
+                    <button id="calendar-btn" class="btn-calendar">📅 收益日历</button>
+                </div>
+            </section>
+
+            <!-- 侧边信息面板 -->
+            <aside class="side-panel">
+                <!-- 虚拟消费场景 -->
+                <div class="consumption-panel">
+                    <h3>💸 当前可购买</h3>
+                    <div id="affordable-items" class="affordable-list">
+                        <div class="item">
+                            <span class="item-icon">☕</span>
+                            <span class="item-name">生椰拿铁</span>
+                            <span class="item-count" id="coffee-count">0</span>杯
+                        </div>
+                        <div class="item">
+                            <span class="item-icon">🎮</span>
+                            <span class="item-name">Switch游戏</span>
+                            <span class="item-count" id="game-count">0</span>个
+                        </div>
+                        <div class="item">
+                            <span class="item-icon">🍔</span>
+                            <span class="item-name">麦当劳套餐</span>
+                            <span class="item-count" id="meal-count">0</span>份
+                        </div>
+                        <div class="item">
+                            <span class="item-icon">🚇</span>
+                            <span class="item-name">地铁票</span>
+                            <span class="item-count" id="subway-count">0</span>张
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 梦想基金 -->
+                <div class="dream-fund">
+                    <h3>🏖️ 梦想基金进度</h3>
+                    <div class="dream-item">
+                        <div class="dream-header">
+                            <span class="dream-name">海南冲浪之旅</span>
+                            <span class="dream-target">¥3000</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="dream-progress" class="progress-fill"></div>
+                        </div>
+                        <div class="dream-footer">
+                            <span id="dream-percentage">0%</span>
+                            <span id="dream-days">还需 ∞ 天</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 成就系统 -->
+                <div class="achievements">
+                    <h3>🏆 成就解锁</h3>
+                    <div id="achievement-list" class="achievement-list">
+                        <div class="achievement locked" data-achievement="coffee">
+                            <span class="achievement-icon">☕</span>
+                            <span class="achievement-text">奶茶自由</span>
+                            <span class="achievement-desc">赚够一杯奶茶钱</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="survivor">
+                            <span class="achievement-icon">💪</span>
+                            <span class="achievement-text">996幸存者</span>
+                            <span class="achievement-desc">连续工作12小时</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="manager">
+                            <span class="achievement-icon">⏰</span>
+                            <span class="achievement-text">时间管理大师</span>
+                            <span class="achievement-desc">单日暂停3次以上</span>
+                        </div>
+                        <div class="achievement locked" data-achievement="hundred">
+                            <span class="achievement-icon">💯</span>
+                            <span class="achievement-text">百元大关</span>
+                            <span class="achievement-desc">单日收益破百</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- 图表区域 -->
+        <section class="charts-section">
+            <div class="chart-container">
+                <h3>📈 摸鱼经济学</h3>
+                <div class="chart-tabs">
+                    <button class="chart-tab active" data-chart="earnings">收益曲线</button>
+                    <button class="chart-tab" data-chart="time">时间分配</button>
+                </div>
+                <canvas id="earnings-chart" width="600" height="300"></canvas>
+                <canvas id="time-chart" width="600" height="300" style="display: none;"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div id="settings-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ 薪资设置</h2>
+                <button id="close-settings" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="monthly-salary">月薪 (元)</label>
+                    <input type="number" id="monthly-salary" placeholder="请输入月薪" value="8000">
+                </div>
+                <div class="form-group">
+                    <label for="work-days">每月工作日</label>
+                    <input type="number" id="work-days" placeholder="通常为22天" value="22">
+                </div>
+                <div class="form-group">
+                    <label for="work-hours">每日工作时长 (小时)</label>
+                    <input type="number" id="work-hours" placeholder="通常为8小时" value="8" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label for="overtime-rate">加班倍率</label>
+                    <select id="overtime-rate">
+                        <option value="1">正常工作</option>
+                        <option value="1.5">加班1.5倍</option>
+                        <option value="2">节假日2倍</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lunch-start">午休开始时间</label>
+                    <input type="time" id="lunch-start" value="12:00">
+                </div>
+                <div class="form-group">
+                    <label for="lunch-end">午休结束时间</label>
+                    <input type="time" id="lunch-end" value="13:00">
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="enable-effects" checked> 启用粒子特效
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="enable-sounds" checked> 启用音效
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="auto-lunch-break" checked> 自动午休暂停
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="auto-pause-hidden"> 页面切换时自动暂停
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="auto-clean-history"> 新年时自动清理上一年数据
+                    </label>
+                </div>
+                
+                <!-- 物品管理 -->
+                <div class="form-section">
+                    <h3>🛍️ 物品管理</h3>
+                    <div id="items-list" class="items-management">
+                        <!-- 现有物品将通过JavaScript动态生成 -->
+                    </div>
+                    <button type="button" id="add-item" class="btn-secondary">+ 添加新物品</button>
+                </div>
+                
+                <!-- 梦想基金管理 -->
+                <div class="form-section">
+                    <h3>🏖️ 梦想基金管理</h3>
+                    <div class="dream-management">
+                        <div class="form-group">
+                            <label for="dream-icon">梦想图标</label>
+                            <input type="text" id="dream-icon" class="emoji-input" placeholder="🏖️" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="dream-name">梦想项目</label>
+                            <input type="text" id="dream-name" placeholder="海南冲浪之旅">
+                        </div>
+                        <div class="form-group">
+                            <label for="dream-target">目标金额 (元)</label>
+                            <input type="number" id="dream-target" placeholder="3000" min="1" step="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings" class="btn-primary">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成就通知 -->
+    <div id="achievement-notification" class="notification" style="display: none;">
+        <div class="notification-content">
+            <div class="notification-icon">🎉</div>
+            <div class="notification-text">
+                <div class="notification-title">成就解锁！</div>
+                <div id="notification-message" class="notification-message"></div>
+            </div>
+            <button class="notification-close">×</button>
+        </div>
+    </div>
+
+    <!-- 日报弹窗 -->
+    <div id="daily-report" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 今日摸鱼报告</h2>
+                <button id="close-report" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-celebration">
+                    <div class="celebration-icon">🎉</div>
+                    <div class="celebration-text">今日财富自由之路启动！</div>
+                </div>
+                <div class="report-stats">
+                    <div class="report-item">
+                        <span class="report-label">今日收益</span>
+                        <span id="report-earnings" class="report-value">¥0.00</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">工作时长</span>
+                        <span id="report-hours" class="report-value">0小时0分钟</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">摸鱼指数</span>
+                        <span id="report-index" class="report-value">击败了全国0%的摸鱼选手</span>
+                    </div>
+                    <div class="report-item">
+                        <span class="report-label">暂停次数</span>
+                        <span id="report-pauses" class="report-value">0次</span>
+                    </div>
+                </div>
+                <div class="report-message">
+                    <p id="daily-message">恭喜你完成了今天的工作！记得劳逸结合，明天继续加油！</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="share-report" class="btn-secondary">分享报告</button>
+                <button id="close-report-btn" class="btn-primary">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 彩带动画容器 -->
+    <div id="confetti-container"></div>
+
+    <!-- 收益日历弹窗 -->
+    <div id="calendar-modal" class="modal" style="display: none;">
+        <div class="modal-content calendar-modal-content">
+            <div class="modal-header">
+                <h2>📅 收益日历</h2>
+                <button id="close-calendar" class="btn-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="calendar-header">
+                    <button id="prev-month" class="calendar-nav-btn">‹</button>
+                    <div class="calendar-title">
+                        <span id="calendar-year">2024</span>年
+                        <span id="calendar-month">12</span>月
+                    </div>
+                    <button id="next-month" class="calendar-nav-btn">›</button>
+                </div>
+                <div class="calendar-stats">
+                    <div class="calendar-stat-item">
+                        <span class="calendar-stat-label">本月累计</span>
+                        <span id="calendar-monthly-total" class="calendar-stat-value">¥0.00</span>
+                    </div>
+                    <div class="calendar-stat-item">
+                        <span class="calendar-stat-label">本年累计</span>
+                        <span id="calendar-yearly-total" class="calendar-stat-value">¥0.00</span>
+                    </div>
+                    <div class="calendar-stat-item">
+                        <span class="calendar-stat-label">工作天数</span>
+                        <span id="calendar-work-days" class="calendar-stat-value">0天</span>
+                    </div>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-weekdays">
+                        <div class="weekday">日</div>
+                        <div class="weekday">一</div>
+                        <div class="weekday">二</div>
+                        <div class="weekday">三</div>
+                        <div class="weekday">四</div>
+                        <div class="weekday">五</div>
+                        <div class="weekday">六</div>
+                    </div>
+                    <div id="calendar-days" class="calendar-days">
+                        <!-- 日历日期将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-color no-work"></div>
+                        <span>未工作</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color low-earnings"></div>
+                        <span>低收益 (0-50元)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color medium-earnings"></div>
+                        <span>中收益 (50-100元)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color high-earnings"></div>
+                        <span>高收益 (100元+)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
